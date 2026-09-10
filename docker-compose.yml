@@ -2,6 +2,8 @@ services:
   ml-lab:
     build: .
     env_file: ${ENV_FILE:-.env}
+    # Keep the process non-root while allowing the host deploy user to back up storage.
+    user: "10001:1000"
     ports:
       - "${HOST_BIND:-127.0.0.1}:8000:8000"
     volumes:
