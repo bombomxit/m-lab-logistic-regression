@@ -67,6 +67,7 @@ def get_dataset(dataset_id: str) -> dict:
     if not dataset:
         raise HTTPException(status_code=404, detail="Không tìm thấy dataset.")
     dataset["columns"] = database.deserialize(dataset.pop("columns_json"))
+    dataset["stored_path"] = str(database.resolve_storage_path(dataset["stored_path"]))
     return dataset
 
 
@@ -95,6 +96,8 @@ def get_model(model_id: str | None = None) -> dict:
     if not model:
         raise HTTPException(status_code=404, detail="Chưa có model active. Hãy train một model trước.")
     model["metrics"] = database.deserialize(model.pop("metrics_json"))
+    model["artifact_path"] = str(database.resolve_storage_path(model["artifact_path"]))
+    model["metadata_path"] = str(database.resolve_storage_path(model["metadata_path"]))
     return add_model_display_identity(model)
 
 

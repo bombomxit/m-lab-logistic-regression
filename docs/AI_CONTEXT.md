@@ -43,5 +43,5 @@ Khi sửa UI, mở luồng `Dataset -> Train -> Models -> Predict` trên desktop
 
 - Test tự dùng `tmp_path`; không được làm bẩn `storage/` thật.
 - Repo này cố ý version control `storage/` để reproducible demo. Không commit `.env`, WAL/SHM hoặc dữ liệu thật nhạy cảm.
-- Chỉ load `model.joblib` do chính pipeline tạo; `joblib`/pickle không an toàn nếu artifact bị thay thế. SQLite snapshot có absolute local paths, chấp nhận được trong repo private demo nhưng không nên public hóa.
+- Chỉ load `model.joblib` do chính pipeline tạo; `joblib`/pickle không an toàn nếu artifact bị thay thế. Path dataset/artifact trong SQLite phải relative-to-storage để clone/Docker portable.
 - Trước khi reset storage, dùng backup hoặc đưa thư mục cũ vào Thùng rác; không xóa mơ hồ.

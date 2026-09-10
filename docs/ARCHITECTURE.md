@@ -83,6 +83,6 @@ Các route không tìm thấy dataset/model, CSV mẫu không nằm trong allowl
 
 ## Dữ liệu được version control
 
-`storage/` được commit theo chủ đích cho repo cá nhân này, gồm SQLite, ba CSV đã import và ba artifact `joblib`. Không commit file `*.sqlite3-wal` hoặc `*.sqlite3-shm` vì chúng là trạng thái tạm của SQLite WAL.
+`storage/` được commit theo chủ đích cho repo cá nhân này, gồm SQLite, ba CSV đã import và ba artifact `joblib`. Các path trong SQLite là relative-to-storage để snapshot chạy được sau khi clone sang thư mục khác hoặc trong Docker. Không commit file `*.sqlite3-wal` hoặc `*.sqlite3-shm` vì chúng là trạng thái tạm của SQLite WAL.
 
 Các metric từ CSV nhỏ hư cấu chỉ kiểm tra pipeline; dữ liệu gần đơn điệu theo label nên F1/ROC-AUC cao là shortcut synthetic, không suy rộng thành chất lượng model thực tế. Với dự án thật nên dùng dataset lớn hơn, cross-validation và kiểm tra category chưa từng thấy.

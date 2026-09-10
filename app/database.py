@@ -100,6 +100,29 @@ def deserialize(value: str) -> Any:
     return json.loads(value)
 
 
+def relative_storage_path(path: Path) -> str:
+    """Persist paths independently of the checkout directory."""
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(settings.data_dir.resolve()))
+    except ValueError:
+        return str(path)
+
+
+def resolve_storage_path(value: str | Path) -> Path:
+    """Resolve stored paths, including snapshots made with older absolute paths."""
+    path = Path(value)
+    if not path.is_absolute():
+        return settings.data_dir / path
+    try:
+        return settings.data_dir / path.resolve().relative_to(settings.data_dir.resolve())
+    except ValueError:
+        for marker in ("uploads", "models"):
+            if marker in path.parts:
+                return settings.data_dir.joinpath(*path.parts[path.parts.index(marker):])
+        return path
+
+
 def fetch_one(query: str, params: tuple[Any, ...] = ()) -> dict[str, Any] | None:
     with connection() as db:
         row = db.execute(query, params).fetchone()
@@ -116,7 +139,7 @@ def create_dataset(dataset_id: str, filename: str, path: Path, row_count: int, c
     with connection() as db:
         db.execute(
             "INSERT INTO datasets VALUES (?, ?, ?, ?, ?, ?)",
-            (dataset_id, filename, str(path), row_count, serialize(columns), now()),
+            (dataset_id, filename, relative_storage_path(path), row_count, serialize(columns), now()),
         )
 
 
@@ -148,8 +171,9 @@ def create_model(model: dict[str, Any]) -> None:
         db.execute(
             "INSERT INTO model_versions (id, dataset_id, job_id, version, artifact_path, metadata_path, metrics_json, is_active, created_at, model_name, purpose) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",
             (
-                model["id"], model["dataset_id"], model["job_id"], model["version"], model["artifact_path"],
-                model["metadata_path"], serialize(model["metrics"]), now(), model["model_name"], model["purpose"],
+                model["id"], model["dataset_id"], model["job_id"], model["version"],
+                relative_storage_path(Path(model["artifact_path"])), relative_storage_path(Path(model["metadata_path"])),
+                serialize(model["metrics"]), now(), model["model_name"], model["purpose"],
             ),
         )
 

@@ -73,7 +73,7 @@ def run_training_job(job_id: str) -> None:
 
         label_column = job["label_column"]
         features: list[str] = database.deserialize(job["feature_columns_json"])
-        dataframe = pd.read_csv(dataset["stored_path"], encoding="utf-8-sig")
+        dataframe = pd.read_csv(database.resolve_storage_path(dataset["stored_path"]), encoding="utf-8-sig")
         if len(dataframe) > settings.max_rows:
             raise ValueError("Dataset vượt giới hạn row đã cấu hình.")
         if label_column not in dataframe.columns:
@@ -182,12 +182,12 @@ def run_training_job(job_id: str) -> None:
 
 
 def load_metadata(model: dict[str, Any]) -> dict[str, Any]:
-    return json.loads(Path(model["metadata_path"]).read_text(encoding="utf-8"))
+    return json.loads(database.resolve_storage_path(model["metadata_path"]).read_text(encoding="utf-8"))
 
 
 def predict(model: dict[str, Any], inputs: dict[str, Any]) -> dict[str, Any]:
     metadata = load_metadata(model)
-    model_object = joblib.load(model["artifact_path"])
+    model_object = joblib.load(database.resolve_storage_path(model["artifact_path"]))
     feature_values: dict[str, list[Any]] = {}
     normalized_inputs: dict[str, Any] = {}
     for feature in metadata["features"]:

@@ -101,6 +101,10 @@ def test_upload_train_and_predict_flow():
         job_page = client.get(started.headers["location"])
         assert "SUCCEEDED" in job_page.text
         assert "Dự đoán nguy cơ rời dịch vụ" in job_page.text
+        stored_model = database.fetch_one("SELECT artifact_path, metadata_path FROM model_versions LIMIT 1")
+        assert stored_model
+        assert not Path(stored_model["artifact_path"]).is_absolute()
+        assert not Path(stored_model["metadata_path"]).is_absolute()
 
         predict_page = client.get("/predict")
         model_id = re.search(r'name="model_id" value="([^"]+)"', predict_page.text)
