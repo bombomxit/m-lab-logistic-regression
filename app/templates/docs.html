@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Docs Logistic Regression - ML Lab{% endblock %}
+{% block content %}
+<section class="docs-hero">
+  <p class="eyebrow">ML LAB / LEARNING GUIDE</p>
+  <h1>Logistic Regression,<br><em>từ CSV đến quyết định.</em></h1>
+  <p>Không cần biết hết toán mới bắt đầu. Hãy dùng dữ liệu giả, nhìn model học gì và đọc đúng điều nó chưa biết.</p>
+  <nav class="docs-toc" aria-label="Mục lục tài liệu">
+    <a href="#flow">Luồng</a>
+    <a href="#logistic">Logistic Regression</a>
+    <a href="#metrics">Metrics</a>
+    <a href="#samples">CSV mẫu</a>
+  </nav>
+</section>
+
+<section id="flow" class="docs-section">
+  <div class="section-kicker"><span>01</span><p class="eyebrow">FULL FLOW</p></div>
+  <div class="section-intro">
+    <h2>Năm bước, một vòng lặp học.</h2>
+    <p>Đây là thứ đang xảy ra trong ML Lab. Làm theo thứ tự để mỗi màn hình đều có ý nghĩa.</p>
+  </div>
+  <ol class="learning-map">
+    <li><strong>CSV</strong><span>Mỗi hàng là một ví dụ đã xảy ra.</span></li>
+    <li><strong>Label + feature</strong><span>Chọn đáp án thật và thông tin model được phép xem.</span></li>
+    <li><strong>Train</strong><span>Model tìm weight để tách hai class từ dữ liệu cũ.</span></li>
+    <li><strong>Evaluate</strong><span>Dùng phần test chưa thấy để đo model đúng và sai kiểu nào.</span></li>
+    <li><strong>Predict</strong><span>Đưa một record mới vào và nhận probability.</span></li>
+  </ol>
+</section>
+
+<section id="logistic" class="docs-section docs-split">
+  <div class="section-kicker"><span>02</span><p class="eyebrow">CORE IDEA</p></div>
+  <div>
+    <h2>Model không nói “chắc chắn”. Nó trả probability.</h2>
+    <p>Logistic Regression lấy các feature, nhân chúng với những weight đã học, rồi nén kết quả về một số từ 0 đến 1.</p>
+    <p class="equation">p = 1 / (1 + e<sup>-z</sup>)</p>
+    <p><code>z</code> là tổ hợp có trọng số của feature. Với <code>p = 0.83</code>, model đang nói: “với pattern đã học, class dương có khả năng khoảng 83%”.</p>
+    <p>Threshold biến probability thành nhãn hiển thị. Mặc định trong app là <code>0.5</code>: <code>p ≥ 0.5</code> thành class dương, thấp hơn thành class còn lại.</p>
+  </div>
+  <aside class="glossary-card">
+    <p class="term-label">TỪ ĐIỂN 60 GIÂY</p>
+    <dl>
+      <div><dt>Row</dt><dd>Một ví dụ trong CSV.</dd></div>
+      <div><dt>Feature</dt><dd>Thông tin model nhìn vào.</dd></div>
+      <div><dt>Label</dt><dd>Đáp án thật model học để dự đoán.</dd></div>
+      <div><dt>Class dương</dt><dd>Giá trị thứ hai sau khi sort lexical các label.</dd></div>
+      <div><dt>Active model</dt><dd>Model đang được màn Predict sử dụng.</dd></div>
+    </dl>
+  </aside>
+</section>
+
+<section id="metrics" class="docs-section">
+  <div class="section-kicker"><span>03</span><p class="eyebrow">READ THE RESULT</p></div>
+  <div class="section-intro">
+    <h2>Đừng nhìn mỗi Accuracy.</h2>
+    <p>Metrics chỉ đáng tin khi bạn biết model đang sai trường hợp nào và dataset có giống tình huống thật hay không. App cũng ghi ROC-AUC để xem khả năng xếp hạng ở nhiều threshold.</p>
+  </div>
+  <div class="metric-guide">
+    <article><h3>Accuracy</h3><p>Tỷ lệ dự đoán đúng tổng thể. Có thể đánh lừa khi một class áp đảo.</p></article>
+    <article><h3>Precision</h3><p>Trong các lần model đoán class dương, có bao nhiêu lần đúng?</p></article>
+    <article><h3>Recall</h3><p>Trong các class dương thật, model tìm được bao nhiêu?</p></article>
+    <article><h3>F1</h3><p>Cân bằng Precision và Recall; hữu ích khi hai class không đều nhau.</p></article>
+    <article><h3>ROC-AUC</h3><p>Đo khả năng xếp hạng hai class qua nhiều threshold, dùng probability thay vì nhãn cắt tại 0.5.</p></article>
+  </div>
+  <div class="mistake-note">
+    <strong>Confusion Matrix:</strong> hàng là sự thật, cột là dự đoán. Ô chéo là đúng. Hai ô còn lại là <em>false positive</em> (báo dương sai) và <em>false negative</em> (bỏ sót class dương).
+  </div>
+</section>
+
+<section id="samples" class="docs-section">
+  <div class="section-kicker"><span>04</span><p class="eyebrow">PRACTICE SAFELY</p></div>
+  <div class="section-intro">
+    <h2>Tải một CSV giả lập và train thử.</h2>
+    <p>Tất cả dataset dưới đây là hư cấu, chỉ dành cho thực hành. Chọn cột <code>label</code> ghi trong thẻ, giữ các cột còn lại làm feature.</p>
+  </div>
+  <div class="sample-grid">
+    <article class="sample-card">
+      <p class="sample-number">01 / EASY</p>
+      <h3>Customer churn</h3>
+      <p>Nhìn pattern khách hàng rời dịch vụ qua số ngày inactive, ticket support và gói dịch vụ.</p>
+      <dl><div><dt>Label</dt><dd><code>churned</code>: yes / no</dd></div><div><dt>Features</dt><dd>days_inactive, tickets, plan</dd></div></dl>
+      <p class="exercise">Thử tăng <code>days_inactive</code> và xem probability thay đổi ra sao.</p>
+      <a class="button button-quiet" href="/samples/churn_sample.csv" download>Tải churn_sample.csv</a>
+    </article>
+    <article class="sample-card">
+      <p class="sample-number">02 / MIXED FEATURES</p>
+      <h3>Marketing response</h3>
+      <p>Dự đoán phản hồi với chiến dịch giả lập từ lượt truy cập, giảm giá, kênh và membership.</p>
+      <dl><div><dt>Label</dt><dd><code>responded</code>: yes / no</dd></div><div><dt>Features</dt><dd>visits, discount_rate, channel, membership</dd></div></dl>
+      <p class="exercise">So sánh cùng mức giảm giá giữa <code>email</code> và <code>sms</code>.</p>
+      <a class="button button-quiet" href="/samples/marketing_response.csv" download>Tải marketing_response.csv</a>
+    </article>
+    <article class="sample-card">
+      <p class="sample-number">03 / EXPERIMENT</p>
+      <h3>Returning customer</h3>
+      <p>Dự đoán khách hàng giả lập có quay lại trong kỳ sau hay không.</p>
+      <dl><div><dt>Label</dt><dd><code>returned</code>: yes / no</dd></div><div><dt>Features</dt><dd>order_count, average_spend, category, loyalty_tier</dd></div></dl>
+      <p class="exercise">Bỏ một feature, train lại và so sánh F1 hoặc Confusion Matrix.</p>
+      <a class="button button-quiet" href="/samples/returning_customer.csv" download>Tải returning_customer.csv</a>
+    </article>
+  </div>
+  <aside class="caution-card"><strong>Nhớ điều này:</strong> score đẹp trên sample nhỏ chỉ chứng minh app và pipeline chạy được. Muốn đánh giá model thật, cần dữ liệu nhiều hơn, đại diện hơn và một tiêu chí lỗi rõ ràng.</aside>
+</section>
+{% endblock %}

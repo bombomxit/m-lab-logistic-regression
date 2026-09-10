@@ -1,0 +1,63 @@
+{
+  "model_id": "cd163f6dbd5b4a618c8e9207e60f5432",
+  "version": "vcd163f6d",
+  "label_column": "responded",
+  "positive_label": "yes",
+  "negative_label": "no",
+  "threshold": 0.5,
+  "features": [
+    {
+      "name": "visits",
+      "kind": "number",
+      "example": 8.5
+    },
+    {
+      "name": "discount_rate",
+      "kind": "number",
+      "example": 15.0
+    },
+    {
+      "name": "channel",
+      "kind": "category",
+      "choices": [
+        "email",
+        "push",
+        "sms"
+      ],
+      "example": "email"
+    },
+    {
+      "name": "membership",
+      "kind": "category",
+      "choices": [
+        "basic",
+        "guest",
+        "premium"
+      ],
+      "example": "basic"
+    }
+  ],
+  "metrics": {
+    "accuracy": 0.75,
+    "precision": 0.6667,
+    "recall": 1.0,
+    "f1": 0.8,
+    "roc_auc": 1.0,
+    "confusion_matrix": [
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "classes": [
+      "no",
+      "yes"
+    ],
+    "test_rows": 4,
+    "train_rows": 12
+  }
+}

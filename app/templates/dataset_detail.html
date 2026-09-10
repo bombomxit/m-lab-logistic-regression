@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Train {{ dataset.original_filename }} - ML Lab{% endblock %}
+{% block content %}
+<section class="page-heading compact"><p class="eyebrow">BƯỚC 2 / 3</p><h1>Đặt tên rồi chọn cách model học</h1><p><strong>{{ dataset.original_filename }}</strong> · {{ dataset.row_count }} rows. Nêu rõ model dùng để làm gì, rồi chọn đáp án thật và các thông tin model được phép dùng.</p></section>
+
+<form class="training-layout" action="/datasets/{{ dataset.id }}/train" method="post" data-training-form>
+  <input type="hidden" name="csrf" value="{{ csrf_token }}">
+  <section class="selection-panel">
+    <div class="panel-heading"><span class="step-number">A</span><div><h2>Đặt tên và mục đích</h2><p>Tên này sẽ xuất hiện khi chọn model ở màn Predict.</p></div></div>
+    <label class="form-label" for="model-name">Tên model</label>
+    <input id="model-name" class="text-input" name="model_name" value="{{ form_values.model_name if form_values else '' }}" minlength="3" maxlength="80" required>
+    <p class="form-help">Ví dụ: <code>Dự đoán khách hàng có nguy cơ rời dịch vụ</code>.</p>
+    <label class="form-label form-label-spaced" for="purpose">Model này dùng để làm gì?</label>
+    <textarea id="purpose" class="textarea-input" name="purpose" minlength="10" maxlength="240" required>{{ form_values.purpose if form_values else '' }}</textarea>
+    <p class="form-help">Ví dụ: <code>Ước lượng khả năng churn từ số ngày không hoạt động, ticket và gói dịch vụ.</code></p>
+  </section>
+
+  <section class="selection-panel">
+    <div class="panel-heading"><span class="step-number">B</span><div><h2>Label là gì?</h2><p>Đây là đáp án thật mà model sẽ học để dự đoán.</p></div></div>
+    <label class="form-label" for="label-column">Cột label</label>
+    <select id="label-column" name="label_column" class="select-input" required data-label-select>
+      <option value="">-- Chọn một cột --</option>
+      {% for column in dataset.columns %}<option value="{{ column.name }}">{{ column.name }}</option>{% endfor %}
+    </select>
+    <p class="form-help">Ví dụ: <code>churned</code>, <code>fraud</code>, <code>is_spam</code>. Cột này phải có đúng hai giá trị khác nhau.</p>
+  </section>
+
+  <section class="selection-panel">
+    <div class="panel-heading"><span class="step-number">C</span><div><h2>Feature là gì?</h2><p>Đây là các thông tin model nhìn vào trước khi dự đoán.</p></div></div>
+    <div class="column-list">
+      {% for column in dataset.columns %}
+      <label class="column-option" data-feature-option data-column-name="{{ column.name }}">
+        <input type="checkbox" name="features" value="{{ column.name }}" checked>
+        <span><strong>{{ column.name }}</strong><small>{{ column.kind }}{% if column.sample %} · ví dụ: {{ column.sample|join(', ') }}{% endif %}</small></span>
+      </label>
+      {% endfor %}
+    </div>
+  </section>
+  <aside class="training-sidebar">
+    <p class="eyebrow">CHECKLIST</p>
+    <ol><li>Không chọn label làm feature.</li><li>Chỉ train một job tại một thời điểm.</li><li>App tự chia 80% train, 20% test.</li></ol>
+    <button class="button button-primary button-wide" type="submit">Train Logistic Regression</button>
+  </aside>
+</form>
+
+{% if jobs %}
+<section class="recent-section"><div class="section-title"><p class="eyebrow">LỊCH SỬ</p><h2>Training jobs</h2></div><div class="list-card">{% for job in jobs %}<a class="list-row" href="/jobs/{{ job.id }}"><span>{{ job.status }}</span><span>label: {{ job.label_column }}</span><span>{{ job.created_at[:16] }}</span></a>{% endfor %}</div></section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Dataset - ML Lab{% endblock %}
+{% block content %}
+<section class="page-heading"><p class="eyebrow">BƯỚC 1 / 3</p><h1>Upload dataset</h1><p>Một CSV là đủ để bắt đầu. Mỗi hàng là một ví dụ cũ, mỗi cột là một thông tin hoặc đáp án thật.</p></section>
+
+<section class="upload-panel">
+  <form action="/datasets" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="{{ csrf_token }}">
+    <label class="file-drop" for="dataset-file">
+      <span class="file-icon">↑</span>
+      <strong>Chọn file CSV</strong>
+      <span>UTF-8, tối đa 20 MB và 100.000 dòng</span>
+      <input id="dataset-file" type="file" name="file" accept=".csv,text/csv" required>
+    </label>
+    <button class="button button-primary" type="submit">Import dataset</button>
+  </form>
+</section>
+
+<section class="hint-strip"><strong>CSV ví dụ:</strong><code>days_inactive, support_tickets, plan, churned</code>. Cột <code>churned</code> sẽ là label gồm hai giá trị như <code>yes/no</code>.</section>
+
+<section class="recent-section">
+  <div class="section-title"><p class="eyebrow">ĐÃ IMPORT</p><h2>Datasets</h2></div>
+  {% if datasets %}
+  <div class="list-card">
+    {% for dataset in datasets %}
+    <div class="dataset-row">
+      <a class="list-row" href="/datasets/{{ dataset.id }}"><span>{{ dataset.original_filename }}</span><span>{{ dataset.row_count }} rows</span><span>{{ dataset.created_at[:10] }}</span></a>
+      <a class="button button-quiet" href="/datasets/{{ dataset.id }}">Train</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}<p class="empty-state">Chưa có dataset. Upload một CSV để bắt đầu.</p>{% endif %}
+</section>
+{% endblock %}

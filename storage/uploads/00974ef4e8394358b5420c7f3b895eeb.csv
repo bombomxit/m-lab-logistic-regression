@@ -1,0 +1,17 @@
+visits,discount_rate,channel,membership,responded
+1,0,email,guest,no
+2,5,email,guest,no
+3,0,sms,guest,no
+4,10,email,basic,no
+5,5,push,basic,no
+6,10,sms,basic,no
+7,15,email,basic,no
+8,20,email,basic,yes
+9,15,sms,basic,yes
+10,20,push,basic,yes
+11,10,email,premium,yes
+12,15,sms,premium,yes
+13,20,email,premium,yes
+14,25,push,premium,yes
+15,20,sms,premium,yes
+16,30,email,premium,yes

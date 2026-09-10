@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Lỗi {{ status_code }} - ML Lab{% endblock %}
+{% block content %}
+<section class="empty-panel"><p class="eyebrow">ERROR {{ status_code }}</p><h1>Có lỗi cần xử lý</h1><p>{{ message }}</p><a class="button button-primary" href="/">Quay về tổng quan</a></section>
+{% endblock %}

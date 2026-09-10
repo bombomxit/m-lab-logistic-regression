@@ -1,0 +1,17 @@
+days_inactive,tickets,plan,churned
+1,0,basic,no
+2,0,basic,no
+3,1,pro,no
+4,0,basic,no
+5,1,pro,no
+6,1,basic,no
+7,0,pro,no
+8,2,basic,no
+18,3,basic,yes
+22,4,basic,yes
+25,4,pro,yes
+28,6,basic,yes
+31,5,pro,yes
+35,7,basic,yes
+38,6,pro,yes
+42,8,basic,yes

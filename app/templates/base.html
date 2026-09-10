@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="ML Lab - Logistic Regression cho người mới học Machine Learning">
+    <title>{% block title %}ML Lab{% endblock %}</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/app.css">
+    <script defer src="/static/app.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark">ML</span>
+        <span><strong>LAB</strong><small>Binary Classification Workbench</small></span>
+      </a>
+      <nav aria-label="Điều hướng chính">
+        <a class="{% if active_page == 'dashboard' %}active{% endif %}" href="/">Tổng quan</a>
+        <a class="{% if active_page == 'datasets' %}active{% endif %}" href="/datasets">Dataset</a>
+        <a class="{% if active_page == 'models' %}active{% endif %}" href="/models">Models</a>
+        <a class="{% if active_page == 'predict' %}active{% endif %}" href="/predict">Predict</a>
+        <a class="{% if active_page == 'docs' %}active{% endif %}" href="/docs">Docs</a>
+      </nav>
+      <span class="environment">{{ app_env }}</span>
+    </header>
+    <main class="page-shell">
+      {% if error %}<div class="notice notice-error" role="alert">{{ error }}</div>{% endif %}
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">ML Lab chỉ dùng để học và thử nghiệm. Model trả xác suất, không tự đưa ra quyết định thật.</footer>
+  </body>
+</html>

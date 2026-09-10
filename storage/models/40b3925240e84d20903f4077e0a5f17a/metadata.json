@@ -1,0 +1,52 @@
+{
+  "model_id": "40b3925240e84d20903f4077e0a5f17a",
+  "version": "v40b39252",
+  "label_column": "churned",
+  "positive_label": "yes",
+  "negative_label": "no",
+  "threshold": 0.5,
+  "features": [
+    {
+      "name": "days_inactive",
+      "kind": "number",
+      "example": 13.0
+    },
+    {
+      "name": "tickets",
+      "kind": "number",
+      "example": 2.5
+    },
+    {
+      "name": "plan",
+      "kind": "category",
+      "choices": [
+        "basic",
+        "pro"
+      ],
+      "example": "basic"
+    }
+  ],
+  "metrics": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "roc_auc": 1.0,
+    "confusion_matrix": [
+      [
+        2,
+        0
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "classes": [
+      "no",
+      "yes"
+    ],
+    "test_rows": 4,
+    "train_rows": 12
+  }
+}

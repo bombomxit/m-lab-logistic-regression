@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Training job - ML Lab{% endblock %}
+{% block content %}
+{% if job.status in ['queued', 'running'] %}<meta http-equiv="refresh" content="2">{% endif %}
+<section class="page-heading compact"><p class="eyebrow">TRAINING JOB</p><h1>{{ job.model_name or 'Model đang học từ dữ liệu' }}</h1><p>{{ job.purpose or 'Đang chờ bổ sung mục đích model.' }} · Job <code>{{ job.id[:8] }}</code> · label: <code>{{ job.label_column }}</code></p></section>
+
+{% if job.status in ['queued', 'running'] %}
+<section class="training-status pending"><div class="pulse-dot"></div><div><p class="eyebrow">{{ job.status|upper }}</p><h2>{% if job.status == 'queued' %}Đang chờ worker{% else %}Đang train Logistic Regression{% endif %}</h2><p>Trang tự cập nhật mỗi 2 giây. Training chạy nền nên UI không bị khóa.</p></div></section>
+{% elif job.status == 'failed' %}
+<section class="training-status failed"><div><p class="eyebrow">FAILED</p><h2>Job không hoàn tất</h2><p>{{ job.error_message }}</p><a class="button button-quiet" href="/datasets/{{ job.dataset_id }}">Quay lại kiểm tra dataset</a></div></section>
+{% else %}
+<section class="training-status success"><div><p class="eyebrow">SUCCEEDED</p><h2>{{ model.display_name }} đã sẵn sàng</h2><p><code>{{ model.version }}</code> · Model mới đang active và có thể dùng ngay ở màn Predict.</p><a class="button button-primary" href="/predict?model_id={{ model.id }}">Mở form Predict</a></div></section>
+
+<section class="metrics-grid" aria-label="Metrics model">
+  <article><span>Accuracy</span><strong>{{ '%.1f'|format(model.metrics.accuracy * 100) }}%</strong><small>Đúng tổng thể</small></article>
+  <article><span>Precision</span><strong>{{ '%.1f'|format(model.metrics.precision * 100) }}%</strong><small>Dự đoán class dương có bao nhiêu đúng</small></article>
+  <article><span>Recall</span><strong>{{ '%.1f'|format(model.metrics.recall * 100) }}%</strong><small>Phát hiện được bao nhiêu class dương thật</small></article>
+  <article><span>F1</span><strong>{{ '%.1f'|format(model.metrics.f1 * 100) }}%</strong><small>Cân bằng Precision và Recall</small></article>
+</section>
+
+<section class="split-section metrics-explanation">
+  <div><p class="eyebrow">CONFUSION MATRIX</p><h2>Model sai kiểu nào?</h2><table class="matrix"><thead><tr><th></th><th>Đoán {{ model.metrics.classes[0] }}</th><th>Đoán {{ model.metrics.classes[1] }}</th></tr></thead><tbody><tr><th>Thật {{ model.metrics.classes[0] }}</th><td>{{ model.metrics.confusion_matrix[0][0] }}</td><td>{{ model.metrics.confusion_matrix[0][1] }}</td></tr><tr><th>Thật {{ model.metrics.classes[1] }}</th><td>{{ model.metrics.confusion_matrix[1][0] }}</td><td>{{ model.metrics.confusion_matrix[1][1] }}</td></tr></tbody></table></div>
+  <aside class="term-card"><p class="term-label">CÁCH ĐỌC</p><p>Hàng là đáp án thật. Cột là dự đoán của model. Ô chéo là dự đoán đúng; hai ô còn lại là các kiểu sai cần xem xét.</p><p>Train: {{ model.metrics.train_rows }} rows · Test: {{ model.metrics.test_rows }} rows · ROC-AUC: {{ '%.3f'|format(model.metrics.roc_auc) }}</p></aside>
+</section>
+{% endif %}
+{% endblock %}

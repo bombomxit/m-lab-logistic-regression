@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Preview {{ dataset.original_filename }} - ML Lab{% endblock %}
+{% block content %}
+<section class="page-heading compact">
+  <p class="eyebrow">DATASET PREVIEW</p>
+  <h1 class="dataset-filename">{{ dataset.original_filename }}</h1>
+  <p>Đây là data nguồn đầy đủ. Model dùng {{ dataset.row_count }} dòng này để tách riêng tập train và tập test.</p>
+  <a class="text-link" href="/datasets/{{ dataset.id }}">← Quay lại chọn Train</a>
+</section>
+
+<section class="data-preview" aria-labelledby="preview-title">
+  <div class="preview-heading"><div><h2 id="preview-title">Dòng {{ page * page_size + 1 }}-{{ [((page + 1) * page_size), dataset.row_count]|min }} trong {{ dataset.row_count }}</h2><p>Preview giới hạn 50 dòng mỗi trang. Nội dung ô dài được rút gọn khi hiển thị.</p></div><span class="page-badge">Trang {{ page + 1 }} / {{ last_page + 1 }}</span></div>
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead><tr><th scope="col">#</th>{% for header in headers %}<th scope="col">{{ header }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for row in rows %}<tr><th scope="row">{{ page * page_size + loop.index }}</th>{% for value in row %}<td title="{{ value }}">{{ value }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  <nav class="pagination" aria-label="Phân trang preview dữ liệu">
+    {% if page > 0 %}<a class="button button-quiet" href="/datasets/{{ dataset.id }}/preview?page={{ page - 1 }}">← Previous</a>{% else %}<span></span>{% endif %}
+    {% if page < last_page %}<a class="button button-primary" href="/datasets/{{ dataset.id }}/preview?page={{ page + 1 }}">Next →</a>{% endif %}
+  </nav>
+</section>
+{% endblock %}

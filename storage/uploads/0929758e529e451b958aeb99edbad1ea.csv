@@ -1,0 +1,17 @@
+order_count,average_spend,category,loyalty_tier,returned
+1,12,home,none,no
+1,18,beauty,none,no
+2,15,books,none,no
+2,24,home,bronze,no
+3,20,beauty,bronze,no
+3,30,books,bronze,no
+4,28,home,bronze,no
+4,36,beauty,silver,yes
+5,35,books,silver,yes
+5,42,home,silver,yes
+6,38,beauty,silver,yes
+6,50,books,gold,yes
+7,46,home,gold,yes
+8,55,beauty,gold,yes
+9,62,books,gold,yes
+10,70,home,gold,yes

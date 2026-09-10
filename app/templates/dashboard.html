@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}ML Lab - Bắt đầu{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">LOGISTIC REGRESSION, KHÔNG BÍ ẨN</p>
+  <h1>Biến CSV thành một <em>model</em><br>rồi hỏi model bằng form.</h1>
+  <p class="hero-copy">ML Lab chia việc học thành các bước nhỏ: upload ví dụ cũ, chọn đáp án thật, train, xem model sai ở đâu và predict một record mới.</p>
+  <div class="hero-actions">
+    <a class="button button-primary" href="/datasets">Upload &amp; train model</a>
+    {% if active_model %}<a class="button button-quiet" href="/predict">Thử Predict model active</a>{% endif %}
+  </div>
+</section>
+
+<section class="flow-grid" aria-label="Luồng làm việc Machine Learning">
+  <article class="flow-step"><span>01</span><h2>Dataset</h2><p>CSV có các ví dụ cũ. Mỗi hàng là một tình huống đã xảy ra.</p></article>
+  <article class="flow-step"><span>02</span><h2>Train</h2><p>Chọn cột label là đáp án thật. Model học từ các hàng đó.</p></article>
+  <article class="flow-step"><span>03</span><h2>Predict</h2><p>Model đã học trả probability cho một input mới.</p></article>
+</section>
+
+<section class="learn-callout" aria-labelledby="learn-callout-title">
+  <div>
+    <p class="eyebrow">BẮT ĐẦU HỌC</p>
+    <h2 id="learn-callout-title">Logistic Regression từ CSV đến probability</h2>
+    <p>Đọc full flow, tải CSV giả lập và biết cách không bị đánh lừa bởi một score đẹp.</p>
+  </div>
+  <a class="button button-primary" href="/docs">Mở Docs học theo luồng</a>
+</section>
+
+<section class="split-section">
+  <div>
+    <p class="eyebrow">TRẠNG THÁI HIỆN TẠI</p>
+    {% if active_model %}
+      <h2>{{ active_model.display_name }} đang active</h2>
+      <p><code>{{ active_model.version }}</code> · F1 score: <strong>{{ '%.1f'|format(active_model.metrics.f1 * 100) }}%</strong>. Model này sẽ được dùng ở màn Predict.</p>
+      <a class="text-link" href="/models">Xem model và metrics →</a>
+    {% else %}
+      <h2>Chưa có model nào</h2>
+      <p>Điều này bình thường. Bắt đầu bằng một CSV có cột feature và một cột label chứa đúng hai giá trị.</p>
+      <a class="text-link" href="/datasets">Đi đến Dataset →</a>
+    {% endif %}
+  </div>
+  <aside class="term-card">
+    <p class="term-label">TỪ ĐIỂN 30 GIÂY</p>
+    <dl>
+      <div><dt>Feature</dt><dd>Thông tin model nhìn vào.</dd></div>
+      <div><dt>Label</dt><dd>Đáp án thật trong dữ liệu cũ.</dd></div>
+      <div><dt>Model</dt><dd>File chứa weight đã học.</dd></div>
+      <div><dt>Predict</dt><dd>Dùng model với input mới.</dd></div>
+    </dl>
+  </aside>
+</section>
+
+{% if datasets %}
+<section class="recent-section">
+  <div class="section-title"><p class="eyebrow">GẦN ĐÂY</p><h2>Dataset mới upload</h2></div>
+  <div class="list-card">
+  {% for dataset in datasets %}
+    <a class="list-row" href="/datasets/{{ dataset.id }}"><span>{{ dataset.original_filename }}</span><span>{{ dataset.row_count }} rows</span><span>{{ dataset.created_at[:10] }}</span></a>
+  {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
